@@ -1,15 +1,25 @@
 use std::env;
 
 // Alias the library’s generic CSG type;
-type Csg<T> = csgrs::csg::CSG<T>;
+type CSG<T> = csgrs::csg::CSG<T>;
 
-fn create_cube_with_tube(len_side: f64, tube_diameter: f64, segments: usize) -> Csg<f64> {
-    let cube = Csg::cube(len_side, len_side, len_side, None);
+fn create_cube_with_tube(len_side: f64, tube_diameter: f64, segments: usize) -> CSG<f64> {
+    let cube = CSG::cube(len_side, len_side, len_side, None);
 
     // Create the tube and translate it to the center of the cube
     let tube_radius = tube_diameter / 2.0;
-    let tube = Csg::cylinder(tube_radius, len_side, segments, None);
+    let tube = CSG::cylinder(tube_radius, len_side, segments, None);
     let tube = tube.translate(len_side / 2.0, len_side / 2.0, 0.0);
+
+    //let font_data = include_bytes!("../fonts/courier-prime-sans/courier-prime-sans.ttf");
+    //let text = format!("{:0.3}", tube_diameter);
+    //let csg_text: CSG<f64> = CSG::text(&text, font_data, 20.0, None);
+    //let text_3d = csg_text.extrude(1.0);
+    //let text_3d = text_3d.rotate(90.0, 0.0, 0.0);
+    //let text_3d = text_3d.translate(0.0, len_side / 2.0, len_side / 2.0);
+
+    //// Union the cube with the tube
+    //cube.union(&text_3d);
 
     // Remove the material from the cube to create the tube
     cube.difference(&tube)
